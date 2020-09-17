@@ -21,9 +21,14 @@ FILE(GLOB_RECURSE IO_SOURCE_FILES
 
 add_library(crp STATIC ${STRUCTURE_SOURCE_FILES} ${ALGORITHM_SOURCE_FILES} ${IO_SOURCE_FILES})
 
+# pre-processing
+add_executable(osm2graph precalculation/OSM2Graph.cpp)
+target_link_libraries(osm2graph crp boost_iostreams)
+
 add_executable(pre_calculation precalculation/Precalculation.cpp)
 target_link_libraries(pre_calculation crp boost_iostreams)
 
+# customization
 add_executable(customization customization/Customization.cpp)
 target_link_libraries(customization crp boost_iostreams)
 

@@ -4,6 +4,9 @@ project(CRP)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 
+include_directories(/usr/local/include/)
+link_directories(/usr/local/lib/)
+
 FILE(GLOB_RECURSE STRUCTURE_SOURCE_FILES
         datastructures/*.cpp
         datastructures/*.h

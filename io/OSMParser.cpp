@@ -31,6 +31,7 @@
 #include <vector>
 #include <unordered_set>
 #include <algorithm>
+#include <numeric>
 
 #include "GraphIO.h"
 

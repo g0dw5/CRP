@@ -27,8 +27,7 @@
 
 #include "OverlayGraph.h"
 
-#include <bits/hashtable_policy.h>
-#include <bits/unordered_map.h>
+#include <unordered_map>
 #include <algorithm>
 #include <cassert>
 #include <iostream>

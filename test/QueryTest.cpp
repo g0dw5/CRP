@@ -47,6 +47,8 @@
 #include <memory>
 #include <iomanip>
 #include <fstream>
+#include <random>
+#include <functional>
 
 using namespace std;
 

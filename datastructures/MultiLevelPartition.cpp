@@ -95,8 +95,10 @@ void MultiLevelPartition::read(const std::string &inputFileName) {
 		std::string line;
 		getline(file, line);
 
+		// 第一行是层数
 		count numLevels = std::stoi(line);
 		numCells = std::vector<count>(numLevels);
+		// 层数行,每行表示有多少个Cell
 		for (index i = 0; i < numLevels; ++i) {
 			std::getline(file, line);
 			numCells[i] = std::stoi(line);
@@ -104,6 +106,7 @@ void MultiLevelPartition::read(const std::string &inputFileName) {
 
 		computeBitmap();
 
+		// 再读一行节点数
 		std::getline(file, line);
 		count numVertices = std::stoi(line);
 

@@ -32,6 +32,7 @@ using namespace std;
 namespace CRP {
 
 void buildCellNumbers(Graph& graph, const MultiLevelPartition& mlp) {
+	// 最细粒度的Cell个数
 	std::vector<pv> cellNumbers;
 	cellNumbers.reserve(mlp.getNumberOfCellsInLevel(0));
 	std::unordered_map<pv, index> pvMap;

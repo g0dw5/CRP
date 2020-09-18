@@ -96,6 +96,7 @@ std::vector<bool> OverlayGraph::buildOverlayVertices(Graph& graph, level numberO
 	std::vector<bool> exitFlagsArray(overlayVertexCount);
 
 	for (size_t j = 0; j < overlayVerticesByLevel.size(); ++j) {
+		// 某层下的所有OverlayVertex
 		auto& v = overlayVerticesByLevel[j];
 		const index vertexOffset = vertexCountInLevel[j] - v.size();
 		std::vector<index> newToOldPosition(v.size());
@@ -116,6 +117,7 @@ std::vector<bool> OverlayGraph::buildOverlayVertices(Graph& graph, level numberO
 			vertex.neighborOverlayVertex = oldToNewPosition[vertex.neighborOverlayVertex] + vertexOffset;
 			sortedVertices.push_back(vertex);
 
+			// tricky
 			bool isExitPoint = newToOldPosition[i] % 2 == 0;
 			exitFlagsArray[i + vertexOffset] = isExitPoint;
 
@@ -149,11 +151,6 @@ std::vector<bool> OverlayGraph::buildOverlayVertices(Graph& graph, level numberO
 }
 
 void OverlayGraph::buildCells(Graph& graph, level numberOfLevels, std::vector<bool> &exitFlagsArray) {
-	struct BuildingCell {
-		std::vector<index> entryPoints;
-		std::vector<index> exitPoints;
-	};
-
 	cellMapping.resize(numberOfLevels);
 	index cellOffset = 0;
 	index overlayIdOffset = 0;

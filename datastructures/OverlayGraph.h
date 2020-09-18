@@ -46,22 +46,29 @@ namespace CRP {
 /**
  * Stores an overlay vertex with all necessary information.
  * The neighborOverlayVertex is the neighboring vertex incident to originalEdge.
- * The originalEdge is either an index to a @ref ForwardEdge (in case the overlay vertex is an exit vertex) or an index to a @ref BackwardEdge
- * (in case the overlay vertex is an entry vertex).
+ * The originalEdge is either an index to a @ref ForwardEdge (in case the overlay vertex is an exit vertex)
+ *                         or an index to a @ref BackwardEdge (in case the overlay vertex is an entry vertex).
  * The vector entryExitPoint stores for each level l on which this vertex is an overlay vertex the entry/exit point index in its cell on level l.
  */
+// 同一个OriginVertex会对应多个OverlayVertex(OverlayVertex是以BoundaryEdge为单位识别的)
+// 高层边界边只会登记OriginVertex一次到最高层级的OverlayVertex,但各个低层级信息会记录在entryExitPoint
+// TODO:如何确定这里是作为Cell的入度还是出度?
 struct OverlayVertex {
 	index originalVertex;
+	// 某条边界边所连接的两个Vertex,这里记录自己之外的另一个点
 	index neighborOverlayVertex;
 	pv cellNumber;
 	index originalEdge;
+	// 当前Vertex是其所在Cell的第几个出度/入度点(分层存储)
 	std::vector<index> entryExitPoint;
 };
 
 struct Cell {
 	index numEntryPoints; // p_C
 	index numExitPoints; // q_C
+	// 码平到大数组(TODO:但为啥这个是从大Cell往小Cell数呢)
 	index cellOffset; // f_C
+	// 码平到大数组(TODO:但为啥这个是从大Cell往小Cell数呢)
 	index overlayIdOffset; // f_C~, maps entry/exit point of cell to overlay vertex.
 };
 
@@ -172,8 +179,11 @@ public:
 	}
 
 private:
+	// 所有的OverlayVertex(先按层级大分段,每层级内按Cell排序,从最低层开始向上存的)
 	std::vector<OverlayVertex> overlayVertices;
+	// 各层级的Cell累计总数
 	std::vector<count> vertexCountInLevel;
+	// 各Level里cellId到Cell的映射
 	std::vector<std::unordered_map<pv, Cell>> cellMapping;
 	std::vector<index> overlayIdMapping;
 	LevelInfo levelInfo;

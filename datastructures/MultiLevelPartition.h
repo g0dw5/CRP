@@ -74,8 +74,11 @@ public:
 	pv getCellNumber(index u) const;
 
 private:
+	// 每层有多少个Cell([0]为最小粒度Cell)
 	std::vector<count> numCells;
+	// 每层Cell需要跳几个bit
 	std::vector<uint8_t> pvOffset;
+	// 每个Node的CellID
 	std::vector<pv> cellNumbers;
 };
 

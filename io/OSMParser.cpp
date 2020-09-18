@@ -538,6 +538,10 @@ void OSMParser::buildGraph(Graph &graph) {
 		if (it != matrixMap.end()) {
 			vertices[v].turnTablePtr = it->second;
 		} else {
+                        if (turnMatrices[v].empty())
+                        {
+                          // 0入0出要加进去么?
+                        }
 			vertices[v].turnTablePtr = matrixOffset;
 			matrixMap.insert(std::make_pair(turnMatrices[v], matrixOffset));
 			for (index i = 0; i < turnMatrices[v].size(); ++i) {

@@ -46,9 +46,13 @@ struct Coordinate {
 };
 
 struct Vertex {
+	// 最细粒度Cell组成的vector中的下标索引
 	index pvPtr;
+	// 转向表索引(TODO)
 	index turnTablePtr;
+	// 首个出度边编号(邻接表方式,与下一个Node该值的差为出度数)
 	index firstOut;
+	// 首个入度边编号(邻接表方式,与下一个Node该值的差为入度数)
 	index firstIn;
 
 	Coordinate coord;
@@ -72,11 +76,16 @@ struct EdgeAttributes {
 };
 
 
+//    *----------->
+//  tail         head
+//   头           尾
 /**
  * Model an outgoing edge of a vertex. The edge enters vertex @a head at @a entryPoint.
  */
 struct ForwardEdge {
+	// 出度边的尾vertex_index
 	index head;
+	// 抵达head的第几个入度
 	turnorder entryPoint;
 	EdgeAttributes attributes;
 };
@@ -85,7 +94,9 @@ struct ForwardEdge {
  * Model an incoming edge of a vertex. The edge exits vertex @a tail at @a exitPoint.
  */
 struct BackwardEdge {
+	// 入度边的头vertex_index
 	index tail;
+	// 抵达tail的第几个出度
 	turnorder exitPoint;
 	EdgeAttributes attributes;
 };
@@ -93,6 +104,7 @@ struct BackwardEdge {
 /**
  * Models an entry or exit point in the graph.
  */
+// OriginVertex作为OverlayVertex时,其作为边界边的各个入度出度的精细化表达
 struct SubVertex {
 	index originalId;
 	turnorder turnOrder;
@@ -379,6 +391,7 @@ private:
 	std::vector<TURN_TYPE> turnTables;
 
 	// PV
+	// 最细粒度Cell数组,每个index位置的原始CellEncodedID
 	std::vector<pv> cellNumbers;
 
 	index maxEdgesInCell;

@@ -56,10 +56,13 @@ bool Graph::hasEdge(index u, index v) const {
 }
 
 void Graph::sortVerticesByCellNumber() {
+	// 每个Cell内的Vertex数组
 	std::vector<std::vector<std::pair<Vertex, index>>> cellVertices(cellNumbers.size());
 	std::vector<count> numForwardEdgesInCell(cellNumbers.size(), 0);
 	std::vector<count> numBackwardEdgesInCell(cellNumbers.size(), 0);
+	// 每个v的各个出度e
 	std::vector<std::vector<ForwardEdge>> fEdges(vertices.size()-1);
+	// 每个v的各个入度e
 	std::vector<std::vector<BackwardEdge>> bEdges(vertices.size()-1);
 
 	maxEdgesInCell = 0;

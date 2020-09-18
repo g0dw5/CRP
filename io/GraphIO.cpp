@@ -170,6 +170,7 @@ bool GraphIO::readGraph(Graph &graph, const std::string &inputFilePath) {
 	std::vector<std::string> tokens;
 
 	if (file.eof()) return false;
+	// 第一行分别存了Node数/Edge数/?/?
 	std::getline(instream, line);
 	tokens = splitString(line, ' ');
 	assert(tokens.size() == 4);
@@ -190,6 +191,7 @@ bool GraphIO::readGraph(Graph &graph, const std::string &inputFilePath) {
 	}
 	vertices[numVertices] = {0, 0, numEdges, numEdges};
 
+	// line 63980
 	std::vector<ForwardEdge> forwardEdges(numEdges);
 	for (index i = 0; i < numEdges; ++i) {
 		if (file.eof()) return false;
@@ -199,6 +201,7 @@ bool GraphIO::readGraph(Graph &graph, const std::string &inputFilePath) {
 		forwardEdges[i] = {stoui(tokens[0]), (turnorder)stoui(tokens[1]), stoui(tokens[2]), std::stof(tokens[3])};
 	}
 
+	// line 183419
 	std::vector<BackwardEdge> backwardEdges(numEdges);
 	for (index i = 0; i < numEdges; ++i) {
 		if (file.eof()) return false;
@@ -208,6 +211,7 @@ bool GraphIO::readGraph(Graph &graph, const std::string &inputFilePath) {
 		backwardEdges[i] = {stoui(tokens[0]), (turnorder)stoui(tokens[1]), stoui(tokens[2]), std::stof(tokens[3])};
 	}
 
+	// line 302858
 	std::vector<pv> cellNumbers(numCellNumbers);
 	pv max = 0;
 	for (index i = 0; i < numCellNumbers; ++i) {
@@ -221,6 +225,7 @@ bool GraphIO::readGraph(Graph &graph, const std::string &inputFilePath) {
 
 	std::cout << "largest cell number is " << max << std::endl;
 
+	// line 302858
 	std::getline(instream, line);
 	tokens = splitString(line, ' ');
 	count numNoEntry = 0;
@@ -230,7 +235,7 @@ bool GraphIO::readGraph(Graph &graph, const std::string &inputFilePath) {
 		if (turnTables[i] == Graph::NO_ENTRY) numNoEntry++;
 	}
 
-
+	// line 302859
 	std::unordered_map<SubVertex, index, SubVertexHasher> overlayVertices;
 	for (index i = 0; i < numOverlayMappings; ++i) {
 		if (file.eof()) return false;
@@ -242,6 +247,7 @@ bool GraphIO::readGraph(Graph &graph, const std::string &inputFilePath) {
 
 	index maxEdgesInCell = 0;
 
+	// line 302859
 	std::vector<index> forwardEdgeCellOffset(cellNumbers.size());
 	std::vector<index> backwardEdgeCellOffset(cellNumbers.size());
 	if (cellNumbers.size() > 0) {
@@ -397,6 +403,7 @@ bool GraphIO::readOverlayGraph(OverlayGraph& graph, const std::string &inputFile
 		std::string line;
 		std::vector<std::string> tokens;
 
+		// 各层Cell编码的偏移bit数
 		if (file.eof()) return false;
 		std::getline(file, line);
 		tokens = splitString(line, ' ');
@@ -409,6 +416,7 @@ bool GraphIO::readOverlayGraph(OverlayGraph& graph, const std::string &inputFile
 		std::cout << std::endl;
 		const LevelInfo levelInfo(offsets);
 
+		// 各层OverlayVertex数
 		if (file.eof()) return false;
 		std::getline(file, line);
 		tokens = splitString(line, ' ');

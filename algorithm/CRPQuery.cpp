@@ -61,16 +61,24 @@ QueryResult CRPQuery::vertexQuery(index sourceVertexId, index targetVertexId, in
 QueryResult CRPQuery::edgeQuery(index sourceEdgeId, index targetEdgeId, index metricId) {
 	currentRound++;
 
+	// 起点Vertex全局index
 	const index s = graph.getForwardEdge(sourceEdgeId).head;
+	// 起点由哪条Edge进入
 	const index sGlobalId = graph.getEntryOffset(s) + graph.getForwardEdge(sourceEdgeId).entryPoint;
 	const pv sCellNumber = graph.getCellNumber(s);
+	// 终点Vertex全局index
 	const index t = graph.getBackwardEdge(targetEdgeId).tail;
-	const pv tCellNumber = graph.getCellNumber(t);
+	// 终点由哪条Edge进入
 	const index tGlobalId = graph.getExitOffset(t) + graph.getBackwardEdge(targetEdgeId).exitPoint;
+	const pv tCellNumber = graph.getCellNumber(t);
 
+        // 起点所在Cell的入度边偏移值
 	const int forwardSOffset = graph.getBackwardEdgeCellOffset(s);
+	// 终点所在Cell的入度边偏移值-所有Cell内最大边数(是为了跳过起点Cell所占据的坑位)
 	const int forwardTOffset = graph.getBackwardEdgeCellOffset(t) - graph.getMaxEdgesInCell();
+	// 起点所在Cell的出度边偏移值
 	const int backwardSOffset = graph.getForwardEdgeCellOffset(s);
+	// 终点所在Cell的出度边偏移值-所有Cell内最大边数(是为了跳过起点Cell所占据的坑位)
 	const int backwardTOffset = graph.getForwardEdgeCellOffset(t) - graph.getMaxEdgesInCell();
 	const index overlayOffset = 2 * graph.getMaxEdgesInCell();
 
@@ -146,7 +154,12 @@ QueryResult CRPQuery::edgeQuery(index sourceEdgeId, index targetEdgeId, index me
 							assert(graph.getMaxEdgesInCell() <= vId && vId < 2*graph.getMaxEdgesInCell());
 						}
 
-						if (forwardInfo[vId].round < currentRound && newDist > forwardInfo[vId].dist) return; // we haven't seen vId yet and we cannot improve anything from this entryPoint
+						if (forwardInfo[vId].round < currentRound && newDist > forwardInfo[vId].dist)
+                                                {
+                                                  // stalling的性能收益点
+                                                  // we haven't seen vId yet and we cannot improve anything from this entryPoint
+                                                  return;
+                                                }
 						
 						if (forwardInfo[vId].round < currentRound || newDist < forwardInfo[vId].dist) {
 							forwardInfo[vId].dist = newDist;
@@ -230,7 +243,12 @@ QueryResult CRPQuery::edgeQuery(index sourceEdgeId, index targetEdgeId, index me
 						}
 
 
-						if (backwardInfo[vId].round < currentRound && newDist > backwardInfo[vId].dist) return; // we haven't seen vId yet and we cannot improve anything from this entryPoint
+						if (backwardInfo[vId].round < currentRound && newDist > backwardInfo[vId].dist)
+                                                {
+                                                  // stalling的性能收益点
+                                                  // we haven't seen vId yet and we cannot improve anything from this exitPoint
+                                                  return;
+                                                }
 						
 						if (backwardInfo[vId].round < currentRound || newDist < backwardInfo[vId].dist) {
 							backwardInfo[vId].dist = newDist;
@@ -317,7 +335,12 @@ QueryResult CRPQuery::edgeQuery(index sourceEdgeId, index targetEdgeId, index me
 								originalWId -= forwardTOffset;
 							}
 
-							if (forwardInfo[originalWId].round < currentRound && newDist > forwardInfo[originalWId].dist) return;  // we haven't seen originalWId yet and we cannot improve anything from this entryPoint
+							if (forwardInfo[originalWId].round < currentRound && newDist > forwardInfo[originalWId].dist)
+                                                        {
+                                                          // stalling的性能收益点
+                                                          // we haven't seen originalWId yet and we cannot improve anything from this entryPoint
+                                                          return;
+                                                        }
 
 							if (forwardInfo[originalWId].round < currentRound || newDist < forwardInfo[originalWId].dist) {
 								forwardInfo[originalWId].dist = newDist;
@@ -399,7 +422,12 @@ QueryResult CRPQuery::edgeQuery(index sourceEdgeId, index targetEdgeId, index me
 								originalWId -= backwardTOffset;
 							}
 
-							if (backwardInfo[originalWId].round < currentRound && newDist > backwardInfo[originalWId].dist) return;  // we haven't seen originalWId yet and we cannot improve anything from this exitPoint
+							if (backwardInfo[originalWId].round < currentRound && newDist > backwardInfo[originalWId].dist)
+                                                        {
+                                                          // stalling的性能收益点
+                                                          // we haven't seen originalWId yet and we cannot improve anything from this exitPoint
+                                                          return;
+                                                        }
 
 							if (backwardInfo[originalWId].round < currentRound || newDist < backwardInfo[originalWId].dist) {
 								backwardInfo[originalWId].dist = newDist;

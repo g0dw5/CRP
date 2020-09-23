@@ -52,6 +52,10 @@ private:
 		VertexIdPair parent;
 	};
 
+	// 最短距离Label的内存维护:
+	// 将起点Cell按最大Cell内的Edge数预留
+	// 将终点Cell按最大Cell内的Edge数预留
+	// 将所有OverlayVertex个数预留
 	std::vector<VertexInfo> forwardInfo;
 	std::vector<VertexInfo> backwardInfo;
 

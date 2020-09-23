@@ -396,8 +396,9 @@ private:
 
 	index maxEdgesInCell;
 
+	// 按Vertex的出度边归这个Cell的方式,编排所有Edge
 	std::vector<index> forwardEdgeCellOffset;
-
+	// 按Vertex的入度边归这个Cell的方式,编排所有Edge
 	std::vector<index> backwardEdgeCellOffset;
 
 	// Graph vertices -> OverlayGraph vertices
